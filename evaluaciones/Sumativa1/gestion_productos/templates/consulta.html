@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Consultar Productos{% endblock %}
+
+{% block content %}
+    <section class="section">
+        <h2 class="section__title">Lista de Productos</h2>
+        {% if productos %}
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Marca</th>
+                            <th>Fecha de Vencimiento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto in productos %}
+                            <tr>
+                                <td>{{ producto.codigo }}</td>
+                                <td>{{ producto.nombre }}</td>
+                                <td>{{ producto.marca }}</td>
+                                <td>{{ producto.fecha_vencimiento }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="message message--info">No hay productos registrados.</p>
+        {% endif %}
+    </section>
+{% endblock %}
