@@ -1,0 +1,224 @@
+import { useState, useEffect } from 'react'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent } from "@/components/ui/card"
+import { Search, ChefHat, Coffee, Utensils, Moon, Cake, Wine, Apple } from "lucide-react"
+import Link from "next/link"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+
+const categories = [
+  { name: "Desayunos", icon: Coffee },
+  { name: "Comidas", icon: Utensils },
+  { name: "Cenas", icon: Moon },
+  { name: "Postres", icon: Cake },
+  { name: "Bebidas", icon: Wine },
+  { name: "Snacks", icon: Apple },
+]
+
+const categoryItems = {
+  Desayunos: [
+    "Tostadas de aguacate", "Huevos revueltos", "Pancakes", "Yogur con granola",
+    "Smoothie de frutas", "Omelette de queso", "Bagel con salmón", "Porridge de avena", "Waffles"
+  ],
+  Comidas: [
+    "Ensalada César", "Pasta carbonara", "Pollo al curry", "Sushi variado",
+    "Hamburguesa gourmet", "Tacos al pastor", "Risotto de champiñones", "Pizza margherita", "Paella valenciana"
+  ],
+  Cenas: [
+    "Salmón a la parrilla", "Sopa de tomate", "Wrap de pollo", "Quiche de espinacas",
+    "Tortilla española", "Ensalada griega", "Lasaña vegetariana", "Pollo asado", "Cuscús con verduras"
+  ],
+  Postres: [
+    "Tarta de chocolate", "Helado de vainilla", "Crema catalana", "Tiramisú",
+    "Cheesecake", "Brownie", "Flan de caramelo", "Mousse de limón", "Tarta de manzana"
+  ],
+  Bebidas: [
+    "Café latte", "Smoothie verde", "Limonada casera", "Té chai",
+    "Mojito", "Agua de Jamaica", "Batido de proteínas", "Sangría", "Chocolate caliente"
+  ],
+  Snacks: [
+    "Hummus con crudités", "Trail mix", "Palomitas de maíz", "Chips de kale",
+    "Edamame", "Bruschetta", "Nachos con guacamole", "Frutos secos tostados", "Rollitos de primavera"
+  ]
+}
+
+const featuredRecipes = [
+  { 
+    title: "Pasta Carbonara", 
+    image: "https://source.unsplash.com/random/400x300?pasta", 
+    description: "Cremosa pasta italiana con huevo y panceta" 
+  },
+  { 
+    title: "Ensalada César", 
+    image: "https://source.unsplash.com/random/400x300?salad", 
+    description: "Clásica ensalada con pollo, crutones y aderezo César" 
+  },
+  { 
+    title: "Tarta de Manzana", 
+    image: "https://source.unsplash.com/random/400x300?apple-pie", 
+    description: "Deliciosa tarta casera con manzanas frescas" 
+  },
+  { 
+    title: "Sushi Variado", 
+    image: "https://source.unsplash.com/random/400x300?sushi", 
+    description: "Selección de sushi fresco con diferentes pescados" 
+  },
+  { 
+    title: "Hamburguesa Gourmet", 
+    image: "https://source.unsplash.com/random/400x300?burger", 
+    description: "Jugosa hamburguesa con ingredientes premium" 
+  },
+]
+
+export default function LandingPage() {
+  const [selectedCategory, setSelectedCategory] = useState(null)
+  const [isSticky, setIsSticky] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const offset = window.scrollY
+      setIsSticky(offset > 300) // Ajusta este valor según sea necesario
+    }
+
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <header className="px-4 lg:px-6 h-14 flex items-center">
+        <Link className="flex items-center justify-center" href="#">
+          <ChefHat className="h-6 w-6 mr-2" />
+          <span className="font-bold">RecetasFáciles</span>
+        </Link>
+        <nav className="ml-auto flex gap-4 sm:gap-6">
+          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
+            Recetas
+          </Link>
+          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
+            Categorías
+          </Link>
+          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
+            Acerca de
+          </Link>
+          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
+            Contacto
+          </Link>
+        </nav>
+      </header>
+      <main className="flex-1">
+        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-cover bg-center" style={{backgroundImage: 'url("https://source.unsplash.com/random/1600x900?cooking")'}}>
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center space-y-4 text-center">
+              <div className="space-y-2">
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none text-white">
+                  Descubre recetas deliciosas
+                </h1>
+                <p className="mx-auto max-w-[700px] text-white md:text-xl">
+                  Encuentra la inspiración culinaria perfecta para cada ocasión
+                </p>
+              </div>
+              <div className="w-full max-w-sm space-y-2">
+                <form className="flex space-x-2">
+                  <Input className="max-w-lg flex-1 bg-white" placeholder="Busca una receta..." type="text" />
+                  <Button type="submit" className="bg-white text-black hover:bg-gray-200">
+                    <Search className="h-4 w-4 mr-2" />
+                    Buscar
+                  </Button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div className={`w-full bg-white transition-all duration-300 ease-in-out ${isSticky ? 'sticky top-0 shadow-md z-50' : ''}`}>
+          <div className="container px-4 md:px-6 py-4">
+            <div className="flex justify-center space-x-2 overflow-x-auto">
+              {categories.map((category, index) => (
+                <Button
+                  key={index}
+                  variant={selectedCategory === category.name ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedCategory(category.name)}
+                  className="flex-shrink-0"
+                >
+                  <category.icon className="h-4 w-4 mr-2" />
+                  {category.name}
+                </Button>
+              ))}
+            </div>
+          </div>
+        </div>
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100">
+          <div className="container px-4 md:px-6">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-8">Explora nuestras recetas</h2>
+            {selectedCategory && (
+              <div className="mt-12">
+                <h3 className="text-2xl font-bold mb-6">Principales {selectedCategory}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {categoryItems[selectedCategory].map((item, index) => (
+                    <Card key={index} className="cursor-pointer hover:shadow-lg transition-shadow">
+                      <CardContent className="p-4">
+                        <img 
+                          src={`https://source.unsplash.com/random/300x200?${item.toLowerCase().replace(' ', '-')}`} 
+                          alt={item} 
+                          className="w-full h-40 object-cover rounded-md mb-4" 
+                        />
+                        <h4 className="font-semibold">{item}</h4>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+        <section className="w-full py-12 md:py-24 lg:py-32">
+          <div className="container px-4 md:px-6">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-8">Recetas destacadas</h2>
+            <Carousel className="w-full max-w-5xl mx-auto">
+              <CarouselContent>
+                {featuredRecipes.map((recipe, index) => (
+                  <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                    <div className="p-1">
+                      <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+                        <CardContent className="p-0">
+                          <img src={recipe.image} alt={recipe.title} className="w-full h-48 object-cover rounded-t-md" />
+                          <div className="p-4">
+                            <h3 className="font-semibold mb-2">{recipe.title}</h3>
+                            <p className="text-sm text-gray-600">{recipe.description}</p>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
+        </section>
+      </main>
+      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
+        <p className="text-xs text-gray-500">© 2023 RecetasFáciles. Todos los derechos reservados.</p>
+        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
+          <Link className="text-xs hover:underline underline-offset-4" href="#">
+            Términos de servicio
+          </Link>
+          <Link className="text-xs hover:underline underline-offset-4" href="#">
+            Privacidad
+          </Link>
+        </nav>
+      </footer>
+    </div>
+  )
+}
