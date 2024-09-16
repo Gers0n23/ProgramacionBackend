@@ -1,180 +1,99 @@
-:root {
-    --color-primary: #3498db;
-    --color-secondary: #2ecc71;
-    --color-background: #f4f4f4;
-    --color-text: #333;
-    --color-text-light: #666;
-    --color-white: #fff;
-    --color-error: #e74c3c;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* Estilos personalizados adicionales */
 
 body {
-    font-family: 'Roboto', sans-serif;
-    line-height: 1.6;
-    color: var(--color-text);
-    background-color: var(--color-background);
+    font-family: 'Inter', sans-serif;
 }
 
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+/* Estilos para el modo oscuro */
+.dark body {
+    background-color: #1a202c;
+    color: #e2e8f0;
 }
 
-.header {
-    background-color: var(--color-primary);
-    color: var(--color-white);
-    padding: 1rem 0;
+/* Animación suave para el cambio de modo claro/oscuro */
+.transition-colors {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
 }
 
-.header__title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+/* Estilo personalizado para los campos de formulario */
+.form-input {
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.nav {
-    display: flex;
-    justify-content: flex-start;
-    gap: 1rem;
+.form-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
 }
 
-.nav__link {
-    color: var(--color-white);
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
-
-.nav__link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-.main {
-    padding: 2rem 0;
-}
-
-.section {
-    background-color: var(--color-white);
-    border-radius: 8px;
-    padding: 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.section__title {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-    color: var(--color-primary);
-}
-
-.form {
-    display: grid;
-    gap: 1rem;
-}
-
-.form__group {
-    display: flex;
-    flex-direction: column;
-}
-
-.form__label {
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-}
-
-.form input[type="text"],
-.form input[type="date"] {
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-}
-
-.form__error {
-    color: var(--color-error);
+/* Estilo para los mensajes de error en formularios */
+.error-message {
+    color: #ef4444;
     font-size: 0.875rem;
     margin-top: 0.25rem;
 }
 
-.button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+/* Estilo para los botones */
+.btn {
+    transition: all 0.3s ease;
 }
 
-.button--primary {
-    background-color: var(--color-secondary);
-    color: var(--color-white);
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.button--primary:hover {
-    background-color: #27ae60;
+/* Estilo para las tarjetas de productos */
+.product-card {
+    transition: all 0.3s ease;
 }
 
-.table-container {
-    overflow-x: auto;
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
 }
 
-.table {
-    width: 100%;
-    border-collapse: collapse;
+/* Estilos para mejorar la legibilidad en modo oscuro */
+.dark .text-gray-600 {
+    color: #9ca3af;
 }
 
-.table th,
-.table td {
-    padding: 0.75rem;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+.dark .bg-gray-100 {
+    background-color: #374151;
 }
 
-.table th {
-    background-color: var(--color-primary);
-    color: var(--color-white);
+/* Estilo para el encabezado en modo oscuro */
+.dark .bg-blue-600 {
+    background-color: #2563eb;
 }
 
-.table tr:nth-child(even) {
-    background-color: #f2f2f2;
+/* Estilo para los enlaces de navegación en hover */
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
-.message {
+/* Estilo para el footer */
+footer {
+    margin-top: auto;
+}
+
+/* Estilo para los iconos en los encabezados de sección */
+.section-icon {
+    display: inline-block;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+/* Estilo para los mensajes de información */
+.info-message {
+    background-color: #e0f2fe;
+    border-left: 4px solid #3b82f6;
     padding: 1rem;
-    border-radius: 4px;
     margin-bottom: 1rem;
 }
 
-.message--info {
-    background-color: #d1ecf1;
-    color: #0c5460;
-}
-
-.footer {
-    background-color: var(--color-text);
-    color: var(--color-white);
-    text-align: center;
-    padding: 1rem 0;
-    margin-top: 2rem;
-}
-
-@media (max-width: 768px) {
-    .header__title {
-        font-size: 1.5rem;
-    }
-
-    .nav {
-        flex-direction: column;
-    }
-
-    .section {
-        padding: 1rem;
-    }
+.dark .info-message {
+    background-color: #1e3a8a;
+    border-left-color: #60a5fa;
 }

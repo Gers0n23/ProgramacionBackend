@@ -3,33 +3,26 @@
 {% block title %}Consultar Productos{% endblock %}
 
 {% block content %}
-    <section class="section">
-        <h2 class="section__title">Lista de Productos</h2>
+    <section class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-semibold mb-6 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            Lista de Productos
+        </h2>
         {% if productos %}
-            <div class="table-container">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Código</th>
-                            <th>Nombre</th>
-                            <th>Marca</th>
-                            <th>Fecha de Vencimiento</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for producto in productos %}
-                            <tr>
-                                <td>{{ producto.codigo }}</td>
-                                <td>{{ producto.nombre }}</td>
-                                <td>{{ producto.marca }}</td>
-                                <td>{{ producto.fecha_vencimiento }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for producto in productos %}
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-md shadow transition duration-300 ease-in-out transform hover:scale-105">
+                        <h3 class="font-semibold text-lg mb-2">{{ producto.nombre }}</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Código: {{ producto.codigo }}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Marca: {{ producto.marca }}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Vencimiento: {{ producto.fecha_vencimiento }}</p>
+                    </div>
+                {% endfor %}
             </div>
         {% else %}
-            <p class="message message--info">No hay productos registrados.</p>
+            <p class="text-center text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 p-4 rounded-md">No hay productos registrados.</p>
         {% endif %}
     </section>
 {% endblock %}
