@@ -16,8 +16,17 @@
                 <div class="space-y-4">
                     <p class="text-lg"><span class="font-semibold">Código:</span> <span class="text-xl font-bold">{{ producto.codigo }}</span></p>
                     <p class="text-lg"><span class="font-semibold">Nombre:</span> <span class="text-xl font-bold">{{ producto.nombre }}</span></p>
+                    <p class="text-lg"><span class="font-semibold">Precio:</span> <span class="text-xl font-bold">${{ producto.precio }}</span></p>
                     <p class="text-lg"><span class="font-semibold">Marca:</span> <span class="text-xl font-bold">{{ producto.marca }}</span></p>
+                    <p class="text-lg"><span class="font-semibold">Categoría:</span> <span class="text-xl font-bold">{{ producto.categoria }}</span></p>
                     <p class="text-lg"><span class="font-semibold">Fecha de Vencimiento:</span> <span class="text-xl font-bold">{{ producto.fecha_vencimiento }}</span></p>
+                    <p class="text-lg"><span class="font-semibold">Características:</span> 
+                        <span class="text-xl font-bold">
+                            {% for caracteristica in producto.caracteristicas.all %}
+                                {{ caracteristica.nombre }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </span>
+                    </p>
                 </div>
                 <div class="mt-8 text-center">
                     <a href="{% url 'registro_producto' %}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">
