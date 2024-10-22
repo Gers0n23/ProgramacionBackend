@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Consultar Productos{% endblock %}
+
+{% block content %}
+<section class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+    <h2 class="text-2xl font-semibold mb-6 flex items-center">Lista de Productos</h2>
+    
+    <form method="get" class="mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label for="categoria" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Categoría</label>
+                <select name="categoria" id="categoria" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <option value="">Todas</option>
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="marca" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Marca</label>
+                <select name="marca" id="marca" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <option value="">Todas</option>
+                    {% for marca in marcas %}
+                        <option value="{{ marca.id }}">{{ marca.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="caracteristica" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Característica</label>
+                <select name="caracteristica" id="caracteristica" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <option value="">Todas</option>
+                    {% for caracteristica in caracteristicas %}
+                        <option value="{{ caracteristica.id }}">{{ caracteristica.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Filtrar</button>
+    </form>
+
+    {% if productos %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for producto in productos %}
+                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-md shadow transition duration-300 ease-in-out transform hover:scale-105">
+                    <h3 class="font-semibold text-lg mb-2">{{ producto.nombre }}</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Código: {{ producto.codigo }}</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Precio: ${{ producto.precio }}</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Marca: {{ producto.marca }}</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Categoría: {{ producto.categoria }}</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Vencimiento: {{ producto.fecha_vencimiento }}</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Características: 
+                        {% for caracteristica in producto.caracteristicas.all %}
+                            {{ caracteristica.nombre }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 p-4 rounded-md">No hay productos registrados.</p>
+    {% endif %}
+</section>
+{% endblock %}

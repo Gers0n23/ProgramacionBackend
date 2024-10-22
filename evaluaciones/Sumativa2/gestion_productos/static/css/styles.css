@@ -1,0 +1,99 @@
+/* Estilos personalizados adicionales */
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* modo oscuro */
+.dark body {
+    background-color: #1a202c;
+    color: #e2e8f0;
+}
+
+/* Animación suave para el cambio de modo claro/oscuro */
+.transition-colors {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+/* Estilo personalizado para los campos de formulario */
+.form-input {
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+/* Estilo para los mensajes de error en formularios */
+.error-message {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Estilo para los botones */
+.btn {
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para las tarjetas de productos */
+.product-card {
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para mejorar la legibilidad en modo oscuro */
+.dark .text-gray-600 {
+    color: #9ca3af;
+}
+
+.dark .bg-gray-100 {
+    background-color: #374151;
+}
+
+/* Estilo para el encabezado en modo oscuro */
+.dark .bg-blue-600 {
+    background-color: #2563eb;
+}
+
+/* Estilo para los enlaces de navegación en hover */
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Estilo para el footer */
+footer {
+    margin-top: auto;
+}
+
+/* Estilo para los iconos en los encabezados de sección */
+.section-icon {
+    display: inline-block;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+/* Estilo para los mensajes de información */
+.info-message {
+    background-color: #e0f2fe;
+    border-left: 4px solid #3b82f6;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.dark .info-message {
+    background-color: #1e3a8a;
+    border-left-color: #60a5fa;
+}

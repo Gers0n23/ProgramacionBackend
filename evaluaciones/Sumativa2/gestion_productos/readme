@@ -1,0 +1,115 @@
+# Gestión de Productos
+
+## Descripción
+Este proyecto es una aplicación web desarrollada con Django para la gestión de productos. Permite administrar productos, categorías, marcas y características.
+
+## Características
+- Gestión completa de productos (CRUD):
+  - Código
+  - Nombre
+  - Precio
+  - Marca
+  - Categoría
+  - Características
+  - Fecha de vencimiento
+- Administración de catálogos en Django Admin:
+  - Categorías
+  - Marcas
+  - Características
+- Filtrado de productos por categoría, marca y características
+- Interfaz de usuario moderna con diseño responsive
+
+## Requisitos
+- Python 3.8+
+- Django 5.1+
+
+## Instalación
+1. Clonar el repositorio:
+```bash
+git clone [URL_DEL_REPOSITORIO]
+cd gestion-productos
+```
+
+2. Crear y activar entorno virtual:
+```bash
+python -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
+```
+
+3. Instalar dependencias:
+```bash
+pip install -r requirements.txt
+```
+
+4. Realizar migraciones:
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+5. Crear superusuario:
+```bash
+python manage.py createsuperuser
+# Usuario: admin
+# Contraseña: inacap2024
+```
+
+## Estructura del Proyecto
+```
+gestion_productos/
+├── gestion_productos/        # Configuración principal
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── asgi.py
+├── productos/               # Aplicación principal
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── tests.py
+│   └── views.py
+├── static/
+│   └── css/
+│       └── styles.css
+├── templates/              # Plantillas HTML
+│   ├── base.html
+│   ├── registro.html
+│   ├── consulta.html
+│   ├── resultado.html
+│   ├── productos/
+│   │   ├── crear.html
+│   │   ├── editar.html
+│   │   ├── eliminar.html
+│   │   └── lista.html
+│   └── caracteristicas/
+│       ├── crear.html
+│       ├── editar.html
+│       ├── eliminar.html
+│       └── lista.html
+├── manage.py
+├── requirements.txt
+└── README.md
+```
+
+## Uso
+1. Iniciar el servidor:
+```bash
+python manage.py runserver
+```
+
+2. Acceder a la aplicación:
+- Panel de administración: `http://localhost:8000/admin`
+- Gestión de productos: `http://localhost:8000`
+
+3. Credenciales de administrador:
+- Usuario: admin
+- Contraseña: inacap2024
+
+## Funcionalidades Principales
+- Registro y gestión de productos
+- Gestión de características de productos
+- Filtrado avanzado de productos
+- Panel de administración Django
