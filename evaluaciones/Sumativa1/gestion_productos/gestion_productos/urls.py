@@ -20,7 +20,20 @@ from productos import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.registro_producto, name='registro_producto'),
+    
+    # URLs para Productos
+    path('', views.lista_productos, name='lista_productos'),
+    path('registro/', views.registro_producto, name='registro_producto'),
     path('consulta/', views.consulta_productos, name='consulta_productos'),
-    path('resultado/', views.resultado_producto, name='resultado_producto'),
+    path('resultado/<int:producto_id>/', views.resultado_producto, name='resultado_producto'),
+    
+    path('producto/crear/', views.crear_producto, name='crear_producto'),
+    path('producto/editar/<int:pk>/', views.editar_producto, name='editar_producto'),
+    path('producto/eliminar/<int:pk>/', views.eliminar_producto, name='eliminar_producto'),
+    
+    # URLs para Características
+    path('caracteristicas/', views.lista_caracteristicas, name='lista_caracteristicas'),
+    path('caracteristica/crear/', views.crear_caracteristica, name='crear_caracteristica'),
+    path('caracteristica/editar/<int:pk>/', views.editar_caracteristica, name='editar_caracteristica'),
+    path('caracteristica/eliminar/<int:pk>/', views.eliminar_caracteristica, name='eliminar_caracteristica'),
 ]

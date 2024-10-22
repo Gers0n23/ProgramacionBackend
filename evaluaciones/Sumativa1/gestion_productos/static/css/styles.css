@@ -4,7 +4,7 @@ body {
     font-family: 'Inter', sans-serif;
 }
 
-/* Estilos para el modo oscuro */
+/* modo oscuro */
 .dark body {
     background-color: #1a202c;
     color: #e2e8f0;
