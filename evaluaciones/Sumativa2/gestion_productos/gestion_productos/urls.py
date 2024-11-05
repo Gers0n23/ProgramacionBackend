@@ -16,13 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.contrib.auth import views as auth_views
 from productos import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     
+    # URLs de autenticación
+    path('', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    
     # URLs para Productos
-    path('', views.lista_productos, name='lista_productos'),
+    path('productos/', views.lista_productos, name='lista_productos'),
     path('registro/', views.registro_producto, name='registro_producto'),
     path('consulta/', views.consulta_productos, name='consulta_productos'),
     path('resultado/<int:producto_id>/', views.resultado_producto, name='resultado_producto'),

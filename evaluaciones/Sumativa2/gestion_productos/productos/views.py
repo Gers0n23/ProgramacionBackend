@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from .forms import ProductoForm, CaracteristicaForm
 from .models import Producto, Categoria, Marca, Caracteristica
 from django.db.models import Q
 
+@login_required
 def registro_producto(request):
     if request.method == 'POST':
         form = ProductoForm(request.POST)
@@ -14,6 +16,7 @@ def registro_producto(request):
         form = ProductoForm()
     return render(request, 'registro.html', {'form': form})
 
+@login_required
 def consulta_productos(request):
     productos = Producto.objects.all()
     categorias = Categoria.objects.all()
@@ -39,14 +42,17 @@ def consulta_productos(request):
     }
     return render(request, 'consulta.html', context)
 
+@login_required
 def resultado_producto(request, producto_id):
     producto = Producto.objects.get(id=producto_id)
     return render(request, 'resultado.html', {'producto': producto})
 
+@login_required
 def lista_productos(request):
     productos = Producto.objects.all()
     return render(request, 'productos/lista.html', {'productos': productos})
 
+@login_required
 def crear_producto(request):
     if request.method == 'POST':
         form = ProductoForm(request.POST)
@@ -58,6 +64,7 @@ def crear_producto(request):
         form = ProductoForm()
     return render(request, 'productos/crear.html', {'form': form})
 
+@login_required
 def editar_producto(request, pk):
     producto = get_object_or_404(Producto, pk=pk)
     if request.method == 'POST':
@@ -70,6 +77,7 @@ def editar_producto(request, pk):
         form = ProductoForm(instance=producto)
     return render(request, 'productos/editar.html', {'form': form, 'producto': producto})
 
+@login_required
 def eliminar_producto(request, pk):
     producto = get_object_or_404(Producto, pk=pk)
     if request.method == 'POST':
@@ -79,10 +87,12 @@ def eliminar_producto(request, pk):
     return render(request, 'productos/eliminar.html', {'producto': producto})
 
 # Vistas de Características
+@login_required
 def lista_caracteristicas(request):
     caracteristicas = Caracteristica.objects.all()
     return render(request, 'caracteristicas/lista.html', {'caracteristicas': caracteristicas})
 
+@login_required
 def crear_caracteristica(request):
     if request.method == 'POST':
         form = CaracteristicaForm(request.POST)
@@ -94,6 +104,7 @@ def crear_caracteristica(request):
         form = CaracteristicaForm()
     return render(request, 'caracteristicas/crear.html', {'form': form})
 
+@login_required
 def editar_caracteristica(request, pk):
     caracteristica = get_object_or_404(Caracteristica, pk=pk)
     if request.method == 'POST':
@@ -106,6 +117,7 @@ def editar_caracteristica(request, pk):
         form = CaracteristicaForm(instance=caracteristica)
     return render(request, 'caracteristicas/editar.html', {'form': form, 'caracteristica': caracteristica})
 
+@login_required
 def eliminar_caracteristica(request, pk):
     caracteristica = get_object_or_404(Caracteristica, pk=pk)
     if request.method == 'POST':

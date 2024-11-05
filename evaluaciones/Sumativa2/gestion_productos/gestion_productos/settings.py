@@ -13,17 +13,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-5ccdl+wf)#)qgwh4xdte7b+az%^s0@2o#nr&-79fv0&x%t7lx2'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -38,7 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'productos',  # Añadimos la aplicación 'productos'
+    'productos',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +50,7 @@ ROOT_URLCONF = 'gestion_productos.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Añadimos el directorio de plantillas
+        'DIRS': [os.path.join(BASE_DIR, 'templates')], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -105,9 +99,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'es-es'  # Cambiamos a español
+LANGUAGE_CODE = 'es-es'
 
-TIME_ZONE = 'America/Bogota'  # Ajustamos la zona horaria (puedes cambiarla según tu ubicación)
+TIME_ZONE = 'America/Santiago'
 
 USE_I18N = True
 
@@ -118,9 +112,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Añadimos el directorio de archivos estáticos
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Configuración de autenticación
+LOGIN_URL = '/'  # URL donde está el formulario de login
+LOGIN_REDIRECT_URL = '/productos/'  # Después de login exitoso
+LOGOUT_REDIRECT_URL = '/'  # Después de logout
+
+# Configuración de sesión
+SESSION_COOKIE_AGE = 3600  # Duración de la sesión en segundos (1 hora)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # La sesión expira al cerrar el navegador
