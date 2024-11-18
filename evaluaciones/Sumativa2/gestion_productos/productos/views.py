@@ -10,7 +10,6 @@ from django.db.models import Q
 from django.contrib.auth.models import Group
 from django.contrib.auth import logout
 from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
 import json
 
 # Función para verificar si el usuario está en el grupo ADMIN_PRODUCTS
@@ -26,7 +25,6 @@ def custom_logout(request):
     logout(request)
     return redirect('/')
 
-@require_http_methods(["GET", "POST"])
 @require_http_methods(["GET", "POST"])
 def custom_login(request):
     if request.method == 'POST':
@@ -110,7 +108,6 @@ def crear_producto(request):
         'login_time': request.session.get('login_time')
     })
 
-@admin_products_required
 @admin_products_required
 def editar_producto(request, pk):
     producto = get_object_or_404(Producto, pk=pk)
@@ -198,13 +195,27 @@ def eliminar_caracteristica(request, pk):
         'user_name': request.session.get('user_name'),
         'login_time': request.session.get('login_time')
     })
-    
+
 def get_cart(request):
     """Obtiene o inicializa el carrito en la sesión"""
     cart = request.session.get('cart', {})
     if not isinstance(cart, dict):
         cart = {}
     return cart
+
+def obtener_detalles_carrito(cart):
+    """Convierte el diccionario del carrito en una lista de items con detalles."""
+    items = []
+    for producto_id, item in cart.items():
+        items.append({
+            'id': producto_id,
+            'nombre': item.get('nombre', ''),
+            'precio': item.get('precio', 0.0),
+            'cantidad': item.get('cantidad', 0),
+            'subtotal': item.get('precio', 0.0) * item.get('cantidad', 0),
+            'imagen': item.get('imagen', '')
+        })
+    return items
 
 @require_http_methods(["POST"])
 @login_required
@@ -232,11 +243,12 @@ def agregar_al_carrito(request):
             
         request.session['cart'] = cart
         total_items = sum(item['cantidad'] for item in cart.values())
+        items = obtener_detalles_carrito(cart)
         
         return JsonResponse({
             'message': 'Producto agregado al carrito',
             'total_items': total_items,
-            'cart': cart
+            'items': items
         })
         
     except Producto.DoesNotExist:
@@ -256,10 +268,11 @@ def quitar_del_carrito(request):
             del cart[producto_id]
             request.session['cart'] = cart
             total_items = sum(item['cantidad'] for item in cart.values())
+            items = obtener_detalles_carrito(cart)
             return JsonResponse({
                 'message': 'Producto eliminado del carrito',
                 'total_items': total_items,
-                'cart': cart
+                'items': items
             })
         return JsonResponse({'error': 'Producto no encontrado en el carrito'}, status=404)
         
@@ -282,10 +295,11 @@ def actualizar_carrito(request):
             cart[producto_id]['cantidad'] = cantidad
             request.session['cart'] = cart
             total_items = sum(item['cantidad'] for item in cart.values())
+            items = obtener_detalles_carrito(cart)
             return JsonResponse({
                 'message': 'Carrito actualizado',
                 'total_items': total_items,
-                'cart': cart
+                'items': items
             })
         return JsonResponse({'error': 'Producto no encontrado en el carrito'}, status=404)
         
@@ -296,7 +310,8 @@ def actualizar_carrito(request):
 def obtener_carrito(request):
     cart = get_cart(request)
     total_items = sum(item['cantidad'] for item in cart.values())
+    items = obtener_detalles_carrito(cart)
     return JsonResponse({
-        'cart': cart,
+        'items': items,
         'total_items': total_items
     })

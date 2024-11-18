@@ -24,7 +24,7 @@ Este proyecto es una aplicación web desarrollada con Django para la gestión de
 - Django 5.1+
 
 ## Instalación
-1. Clonar el repositorio:
+1. Clonar el repositorio: 
 ```bash
 git clone [URL_DEL_REPOSITORIO]
 cd gestion-productos
@@ -33,7 +33,7 @@ cd gestion-productos
 2. Crear y activar entorno virtual:
 ```bash
 python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
+source venv/bin/activate  # En Windows: venv\Scripts\activate 
 ```
 
 3. Instalar dependencias:
@@ -56,14 +56,34 @@ python manage.py createsuperuser
 
 ## Estructura del Proyecto
 ```
-gestion_productos/
-├── gestion_productos/        # Configuración principal
+GESTION_PRODUCTOS
+├── gestion_productos/
+│   ├── __pycache__/
+│   │   ├── __init__.py
+│   │   ├── asgi.py
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   ├── wsgi.py
+│   ├── media/
 │   ├── __init__.py
+│   ├── asgi.py
 │   ├── settings.py
 │   ├── urls.py
-│   ├── wsgi.py
-│   └── asgi.py
-├── productos/               # Aplicación principal
+│   └── wsgi.py
+├── productos/
+│   ├── __pycache__/
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── forms.py
+│   │   ├── models.py
+│   │   ├── tests.py
+│   │   └── views.py
+│   ├── migrations/
+│   │   └── __pycache__/
+│   ├── templatetags/
+│   │   ├── __init__.py
+│   │   └── __pycache__/
 │   ├── __init__.py
 │   ├── admin.py
 │   ├── apps.py
@@ -72,26 +92,30 @@ gestion_productos/
 │   ├── tests.py
 │   └── views.py
 ├── static/
-│   └── css/
-│       └── styles.css
-├── templates/              # Plantillas HTML
-│   ├── base.html
-│   ├── registro.html
-│   ├── consulta.html
-│   ├── resultado.html
+│   ├── css/
+│   │   └── styles.css
+│   └── js/
+│       └── carrito.js
+├── templates/
+│   ├── caracteristicas/
+│   │   ├── crear.html
+│   │   ├── editar.html
+│   │   ├── eliminar.html
+│   │   └── lista.html
 │   ├── productos/
 │   │   ├── crear.html
 │   │   ├── editar.html
 │   │   ├── eliminar.html
 │   │   └── lista.html
-│   └── caracteristicas/
-│       ├── crear.html
-│       ├── editar.html
-│       ├── eliminar.html
-│       └── lista.html
+│   ├── base.html
+│   ├── consulta.html
+│   ├── login.html
+│   ├── registro.html
+│   └── resultado.html
+├── .hintrc
+├── db.sqlite3
 ├── manage.py
-├── requirements.txt
-└── README.md
+└── requirements.txt
 ```
 
 ## Uso

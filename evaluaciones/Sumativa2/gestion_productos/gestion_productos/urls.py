@@ -44,6 +44,12 @@ urlpatterns = [
     path('caracteristica/crear/', views.crear_caracteristica, name='crear_caracteristica'),
     path('caracteristica/editar/<int:pk>/', views.editar_caracteristica, name='editar_caracteristica'),
     path('caracteristica/eliminar/<int:pk>/', views.eliminar_caracteristica, name='eliminar_caracteristica'),
+    
+    # URLs Carrito de compras
+    path('carrito/agregar/', views.agregar_al_carrito, name='agregar_al_carrito'),
+    path('carrito/quitar/', views.quitar_del_carrito, name='quitar_del_carrito'),
+    path('carrito/actualizar/', views.actualizar_carrito, name='actualizar_carrito'),
+    path('carrito/cargar/', views.obtener_carrito, name='cargar_carrito'),
 ]
 
 if settings.DEBUG:
