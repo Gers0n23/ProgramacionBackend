@@ -6,7 +6,7 @@ Este proyecto es una aplicación web desarrollada con Django para la gestión de
 ## Características
 - Gestión completa de productos (CRUD):
   - Código
-  - Nombre
+  - Nombre 
   - Precio
   - Marca
   - Categoría
@@ -24,16 +24,16 @@ Este proyecto es una aplicación web desarrollada con Django para la gestión de
 - Django 5.1+
 
 ## Instalación
-1. Clonar el repositorio: 
+1. Clonar el repositorio:
 ```bash
 git clone [URL_DEL_REPOSITORIO]
 cd gestion-productos
 ```
 
-2. Crear y activar entorno virtual:
+2. Crear y activar entorno virtual: 
 ```bash
 python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate 
+source venv/bin/activate  # En Windows: venv\Scripts\activate
 ```
 
 3. Instalar dependencias:
@@ -51,7 +51,7 @@ python manage.py migrate
 ```bash
 python manage.py createsuperuser
 # Usuario: admin
-# Contraseña: inacap2024
+# Contraseña: inacap2024 
 ```
 
 ## Estructura del Proyecto
@@ -64,7 +64,7 @@ GESTION_PRODUCTOS
 │   │   ├── settings.py
 │   │   ├── urls.py
 │   │   ├── wsgi.py
-│   ├── media/
+│   ├── media/  
 │   ├── __init__.py
 │   ├── asgi.py
 │   ├── settings.py
@@ -80,7 +80,7 @@ GESTION_PRODUCTOS
 │   │   ├── tests.py
 │   │   └── views.py
 │   ├── migrations/
-│   │   └── __pycache__/
+│   │   └── __pycache__/ 
 │   ├── templatetags/
 │   │   ├── __init__.py
 │   │   └── __pycache__/
@@ -106,7 +106,7 @@ GESTION_PRODUCTOS
 │   │   ├── crear.html
 │   │   ├── editar.html
 │   │   ├── eliminar.html
-│   │   └── lista.html
+│   │   └── lista.html 
 │   ├── base.html
 │   ├── consulta.html
 │   ├── login.html
@@ -120,7 +120,7 @@ GESTION_PRODUCTOS
 
 ## Uso
 1. Iniciar el servidor:
-```bash
+```bash 
 python manage.py runserver
 ```
 
@@ -137,3 +137,48 @@ python manage.py runserver
 - Gestión de características de productos
 - Filtrado avanzado de productos
 - Panel de administración Django
+
+## Aseguramiento de Vistas
+Las vistas que requieren autenticación y permisos de administrador (grupo ADMIN_PRODUCTS) han sido aseguradas utilizando los decoradores `@login_required` y `@user_passes_test`. Por ejemplo:
+
+```python
+@login_required
+def lista_productos(request):
+    # ...
+
+@user_passes_test(lambda u: u.groups.filter(name='ADMIN_PRODUCTS').exists())
+def crear_producto(request):
+    # ...
+```
+
+## Uso de Variables de Sesión
+Se utilizan variables de sesión para almacenar información relevante durante la navegación, como el nombre del usuario conectado, la fecha de la conexión y si posee el grupo de accesos ADMIN_PRODUCTS. Por ejemplo:
+
+```python
+def custom_login(request):
+    # ...
+    if user is not None:
+        # ...
+        request.session['user_name'] = user.get_full_name() or user.username
+        request.session['login_time'] = timezone.now().isoformat()
+        request.session['is_admin_products'] = user.groups.filter(name='ADMIN_PRODUCTS').exists()
+        # ...
+```
+
+## Medidas de Seguridad
+1. **Protección CSRF**: Se utiliza el middleware `django.middleware.csrf.CsrfViewMiddleware` y el tag `{% csrf_token %}` en los formularios para proteger contra ataques CSRF (Cross-Site Request Forgery).
+
+2. **Validación de Datos**: Se realizan validaciones en los formularios utilizando las clases `ModelForm` de Django. Esto asegura que los datos ingresados cumplan con los requisitos especificados antes de ser procesados.
+
+   Ejemplo de validación en `CaracteristicaForm`:
+   ```python
+   def clean_nombre(self):
+       nombre = self.cleaned_data.get('nombre')
+       if nombre:
+           nombre = nombre.strip()
+           if len(nombre) < 2:
+               raise forms.ValidationError('El nombre debe tener al menos 2 caracteres.')
+       return nombre
+   ```
+
+3. **Escapado de Caracteres**: Django automáticamente escapa los caracteres especiales en las plantillas para prevenir ataques XSS (Cross-Site Scripting). Esto se logra utilizando el sistema de plantillas de Django y evitando la renderización manual de contenido no confiable.
