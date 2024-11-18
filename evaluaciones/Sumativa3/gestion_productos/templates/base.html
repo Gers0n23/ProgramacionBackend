@@ -1,0 +1,300 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} - Supermercado Ketim Porta</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!--<link href= "{% static 'css/styles2.css' %}" rel="stylesheet"> -->
+    {% block extra_css %}{% endblock %}
+    <meta name="csrf-token" content="{{ csrf_token }}">
+</head>
+<body class="min-h-screen bg-gray-50">
+    {% if request.path != '/' %}
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <a href="{% url 'consulta_productos' %}" class="text-2xl font-bold text-blue-600">
+                    Supermercado Ketim Porta S.A
+                </a>
+                {% if user.is_authenticated and request.path != '/login/' %}
+                <nav class="flex items-center space-x-4">
+                    <a href="{% url 'consulta_productos' %}" class="text-gray-600 hover:text-blue-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                    </a>
+                    {% if request.session.is_admin_products %}
+                    <a href="{% url 'lista_productos' %}" class="text-gray-600 hover:text-blue-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                    </a>
+                    {% endif %}
+                    <a href="/admin" class="text-gray-600 hover:text-blue-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </a>
+                    <a href="{% url 'logout' %}" class="text-gray-600 hover:text-blue-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                    </a>
+                    <button class="carrito-toggle relative text-gray-600 hover:text-blue-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <span id="carrito-contador" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">0</span>
+                    </button>
+                </nav>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    {% endif %}
+
+    <!-- Sidebar del carrito -->
+    <div id="carritoSidebar" class="fixed right-0 top-0 h-full w-80 bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-50">
+        <div class="p-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold">Carrito de Compras</h3>
+                <button class="carrito-toggle">
+                    <!-- Icono de cerrar -->
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="carritoItems" class="space-y-4">
+                <!-- Los items del carrito se insertarán aquí dinámicamente -->
+                <p class="text-gray-500">Tu carrito está vacío.</p>
+            </div>
+        </div>
+    </div>
+
+    <main class="flex-grow" role="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% if request.path != '/' %}
+    <footer class="container mx-auto px-4 py-4 text-center text-gray-600">
+        © 2024 Supermercado Ketim Porta.
+    </footer>
+    {% endif %}
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Inicializando carrito...');
+
+            // Obtener el token CSRF desde la meta etiqueta
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            console.log('CSRF Token:', csrfToken);
+
+            // Seleccionar todos los botones con la clase 'carrito-toggle'
+            const carritoToggles = document.querySelectorAll('.carrito-toggle');
+            const carritoSidebar = document.getElementById('carritoSidebar');
+
+            if (carritoToggles.length > 0 && carritoSidebar) {
+                console.log('Elementos encontrados, asignando eventos...');
+                carritoToggles.forEach(toggle => {
+                    toggle.addEventListener('click', function() {
+                        console.log('Toggle carrito');
+                        carritoSidebar.classList.toggle('translate-x-full');
+
+                        // Si el sidebar se abre, cargar los items del carrito
+                        if (!carritoSidebar.classList.contains('translate-x-full')) {
+                            cargarCarrito();
+                        }
+                    });
+                });
+            } else {
+                console.error('No se encontraron los elementos necesarios para el carrito.');
+            }
+
+            // Botones de agregar al carrito
+            document.querySelectorAll('.agregar-al-carrito').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const productoId = this.dataset.productoId;
+                    console.log('Agregando producto:', productoId);
+                    // Aquí va la lógica de agregar al carrito
+                    fetch('{% url "agregar_al_carrito" %}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: JSON.stringify({
+                            producto_id: productoId,
+                            cantidad: 1
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Respuesta:', data);
+                        if (data.total_items !== undefined) {
+                            document.getElementById('carrito-contador').textContent = data.total_items;
+                        }
+                        if (data.items) {
+                            renderizarCarrito(data.items);
+                        }
+                        // Mostrar mensaje de éxito
+                        mostrarMensaje('Producto agregado al carrito', 'success');
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        mostrarMensaje('Error al agregar el producto', 'error');
+                    });
+                });
+            });
+
+            // Función para cargar el carrito al abrir el sidebar
+            function cargarCarrito() {
+                fetch('{% url "cargar_carrito" %}', {  // Asegúrate de que esta URL esté definida en tus URLs de Django
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Carrito cargado:', data);
+                    if (data.items) {
+                        renderizarCarrito(data.items);
+                        document.getElementById('carrito-contador').textContent = data.total_items;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al cargar el carrito:', error);
+                });
+            }
+
+            // Función para renderizar los items en el carrito
+            function renderizarCarrito(items) {
+                const carritoItems = document.getElementById('carritoItems');
+                carritoItems.innerHTML = ''; // Limpiar los items existentes
+
+                if (items.length === 0) {
+                    carritoItems.innerHTML = '<p class="text-gray-500">Tu carrito está vacío.</p>';
+                    return;
+                }
+
+                items.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.classList.add('flex', 'justify-between', 'items-center', 'border-b', 'pb-2', 'mb-2');
+
+                    // Imagen del producto (opcional)
+                    if (item.imagen) {
+                        const imagen = document.createElement('img');
+                        imagen.src = item.imagen;
+                        imagen.alt = item.nombre;
+                        imagen.classList.add('w-16', 'h-16', 'object-cover', 'mr-4');
+                        itemDiv.appendChild(imagen);
+                    }
+
+                    const detallesDiv = document.createElement('div');
+                    detallesDiv.classList.add('flex', 'flex-col', 'flex-grow');
+
+                    const nombre = document.createElement('span');
+                    nombre.textContent = item.nombre;
+                    nombre.classList.add('font-semibold');
+
+                    const cantidad = document.createElement('span');
+                    cantidad.textContent = `Cantidad: ${item.cantidad}`;
+                    cantidad.classList.add('text-sm', 'text-gray-600');
+
+                    detallesDiv.appendChild(nombre);
+                    detallesDiv.appendChild(cantidad);
+                    itemDiv.appendChild(detallesDiv);
+
+                    const subtotal = document.createElement('span');
+                    subtotal.textContent = `$${item.subtotal.toFixed(2)}`;
+                    subtotal.classList.add('font-semibold', 'text-gray-800');
+                    itemDiv.appendChild(subtotal);
+
+                    // Botón para eliminar el producto del carrito
+                    const eliminarBtn = document.createElement('button');
+                    eliminarBtn.classList.add('text-red-500', 'hover:text-red-700', 'ml-2');
+                    eliminarBtn.innerHTML = `
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    `;
+                    eliminarBtn.addEventListener('click', function() {
+                        eliminarDelCarrito(item.id);
+                    });
+
+                    itemDiv.appendChild(eliminarBtn);
+
+                    carritoItems.appendChild(itemDiv);
+                });
+
+                // Mostrar el total del carrito
+                const totalDiv = document.createElement('div');
+                totalDiv.classList.add('flex', 'justify-between', 'items-center', 'mt-4', 'pt-4', 'border-t');
+
+                const totalLabel = document.createElement('span');
+                totalLabel.textContent = 'Total:';
+                totalLabel.classList.add('font-semibold');
+
+                const totalAmount = document.createElement('span');
+                const total = items.reduce((acc, item) => acc + item.subtotal, 0);
+                totalAmount.textContent = `$${total.toFixed(2)}`;
+                totalAmount.classList.add('font-semibold');
+
+                totalDiv.appendChild(totalLabel);
+                totalDiv.appendChild(totalAmount);
+
+                carritoItems.appendChild(totalDiv);
+            }
+
+            // Función para eliminar un producto del carrito
+            function eliminarDelCarrito(productoId) {
+                console.log('Eliminando producto:', productoId);
+                fetch('{% url "quitar_del_carrito" %}', {  // Asegúrate de que esta URL esté definida en tus URLs de Django
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        producto_id: productoId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Respuesta al eliminar:', data);
+                    if (data.total_items !== undefined) {
+                        document.getElementById('carrito-contador').textContent = data.total_items;
+                    }
+                    if (data.items) {
+                        renderizarCarrito(data.items);
+                    }
+                    mostrarMensaje('Producto eliminado del carrito', 'success');
+                })
+                .catch(error => {
+                    console.error('Error al eliminar el producto:', error);
+                    mostrarMensaje('Error al eliminar el producto', 'error');
+                });
+            }
+
+            // Función para mostrar mensajes de notificación
+            function mostrarMensaje(mensaje, tipo) {
+                const toast = document.createElement('div');
+                toast.className = `fixed bottom-4 right-4 p-4 rounded-lg ${
+                    tipo === 'error' ? 'bg-red-500' : 'bg-green-500'
+                } text-white z-50`;
+                toast.textContent = mensaje;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
