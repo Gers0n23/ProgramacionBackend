@@ -18,13 +18,16 @@ from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from productos import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
+    # URL del administrador
     path('admin/', admin.site.urls),
     
     # URLs de autenticación
-    path('', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('', views.custom_login, name='login'),
+    path('logout/', views.custom_logout, name='logout'),
     
     # URLs para Productos
     path('productos/', views.lista_productos, name='lista_productos'),
@@ -42,3 +45,6 @@ urlpatterns = [
     path('caracteristica/editar/<int:pk>/', views.editar_caracteristica, name='editar_caracteristica'),
     path('caracteristica/eliminar/<int:pk>/', views.eliminar_caracteristica, name='eliminar_caracteristica'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

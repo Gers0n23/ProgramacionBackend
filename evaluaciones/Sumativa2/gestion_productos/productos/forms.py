@@ -4,11 +4,12 @@ from .models import Producto, Categoria, Marca, Caracteristica
 class ProductoForm(forms.ModelForm):
     class Meta:
         model = Producto
-        fields = ['codigo', 'nombre', 'precio', 'marca', 'categoria', 'caracteristicas', 'fecha_vencimiento']
+        fields = ['codigo', 'nombre', 'precio', 'marca', 'categoria', 'caracteristicas', 'fecha_vencimiento', 'imagen']
         widgets = {
             'fecha_vencimiento': forms.DateInput(attrs={'type': 'date'}),
             'caracteristicas': forms.CheckboxSelectMultiple(),
             'precio': forms.NumberInput(attrs={'step': '0.01', 'min': '0'}),
+            'imagen': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'})
         }
         labels = {
             'codigo': 'Código del Producto',
@@ -18,11 +19,8 @@ class ProductoForm(forms.ModelForm):
             'categoria': 'Categoría',
             'caracteristicas': 'Características',
             'fecha_vencimiento': 'Fecha de Vencimiento',
+            'imagen': 'Imagen del Producto'
         }
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['categoria'].queryset = Categoria.objects.all()
-        self.fields['marca'].queryset = Marca.objects.all()
 
 class CaracteristicaForm(forms.ModelForm):
     class Meta:
