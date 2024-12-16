@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Consultar Productos{% endblock %}
+{% block content %}
+
+<div class="container mx-auto px-4 py-8">
+    <!-- Filtros y Búsqueda -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+        <form method="GET" class="space-y-4 md:space-y-0 md:flex md:gap-4">
+            <!-- Campo de búsqueda -->
+            <div class="flex-1">
+                <input type="text" name="search" 
+                       placeholder="Buscar productos..." 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       value="{{ request.GET.search }}">
+            </div>
+            
+            <!-- Selector de categoría -->
+            <div class="w-full md:w-48">
+                <select name="categoria" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Todas las categorías</option>
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria.id }}" 
+                                {% if request.GET.categoria == categoria.id|stringformat:"i" %}selected{% endif %}>
+                            {{ categoria.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Selector de marca -->
+            <div class="w-full md:w-48">
+                <select name="marca" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Todas las marcas</option>
+                    {% for marca in marcas %}
+                        <option value="{{ marca.id }}"
+                                {% if request.GET.marca == marca.id|stringformat:"i" %}selected{% endif %}>
+                            {{ marca.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Botón de filtrar -->
+            <div class="flex space-x-4"> <!-- Agregamos un contenedor flex para los botones -->
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Filtrar
+                </button>
+                <a href="{% url 'consulta_productos' %}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
+                    Limpiar Filtros
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Grid de productos -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for producto in productos %}
+        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
+            <!-- Imagen del producto -->
+            <div class="aspect-w-16 aspect-h-9">
+                {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" 
+                         alt="{{ producto.nombre }}" 
+                         class="w-full h-48 object-cover">
+                {% else %}
+                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                        <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Información del producto -->
+            <div class="p-4">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ producto.nombre }}</h3>
+                <div class="space-y-1 mb-4">
+                    <p class="text-sm text-gray-600">
+                        <span class="font-medium">Marca:</span> {{ producto.marca }}
+                    </p>
+                    <p class="text-sm text-gray-600">
+                        <span class="font-medium">Categoría:</span> {{ producto.categoria }}
+                    </p>
+                    <p class="text-2xl font-bold text-blue-600">${{ producto.precio|floatformat:"0" }}</p>
+                </div>
+                
+                <!-- Botón de agregar al carrito -->
+                <button class="agregar-al-carrito w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                        data-producto-id="{{ producto.id }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    Agregar al carrito
+                </button>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full text-center py-12">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">No hay productos</h3>
+            <p class="mt-1 text-sm text-gray-500">No se encontraron productos con los filtros seleccionados.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- <script>
+//function agregarAlCarrito(productoId, nombre, precio) {
+//    // Por ahora solo mostraremos una notificación
+//    const Toast = Swal.mixin({
+//        toast: true,
+//        position: 'top-end',
+//        showConfirmButton: false,
+//        timer: 3000,
+//        timerProgressBar: true,
+//    });
+//
+//    Toast.fire({
+//        icon: 'success',
+//        title: `${nombre} agregado al carrito`
+//    });
+//}
+//</script>
+
+{% endblock %}

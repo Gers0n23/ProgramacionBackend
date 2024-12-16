@@ -1,0 +1,25 @@
+/* Estilos personalizados que complementan Tailwind */
+.product-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Estilo para el carrito desplegable */
+.cart-sidebar {
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Animaciones suaves */
+.transition-all {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Estilos para los formularios */
+.form-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}

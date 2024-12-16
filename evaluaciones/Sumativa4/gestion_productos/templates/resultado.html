@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Producto Registrado{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="w-full max-w-md">
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <div class="px-6 py-8">
+                <div class="flex items-center justify-center mb-6">
+                    <svg class="h-12 w-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Producto Registrado Exitosamente</h2>
+                <div class="space-y-4">
+                    <p class="text-lg"><span class="font-semibold">Código:</span> <span class="text-xl font-bold">{{ producto.codigo }}</span></p>
+                    <p class="text-lg"><span class="font-semibold">Nombre:</span> <span class="text-xl font-bold">{{ producto.nombre }}</span></p>
+                    <p class="text-lg"><span class="font-semibold">Precio:</span> <span class="text-xl font-bold">${{ producto.precio }}</span></p>
+                    <p class="text-lg"><span class="font-semibold">Marca:</span> <span class="text-xl font-bold">{{ producto.marca }}</span></p>
+                    <p class="text-lg"><span class="font-semibold">Categoría:</span> <span class="text-xl font-bold">{{ producto.categoria }}</span></p>
+                    <p class="text-lg"><span class="font-semibold">Fecha de Vencimiento:</span> <span class="text-xl font-bold">{{ producto.fecha_vencimiento }}</span></p>
+                    <p class="text-lg"><span class="font-semibold">Características:</span> 
+                        <span class="text-xl font-bold">
+                            {% for caracteristica in producto.caracteristicas.all %}
+                                {{ caracteristica.nombre }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </span>
+                    </p>
+                </div>
+                <div class="mt-8 text-center">
+                    <a href="{% url 'registro_producto' %}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">
+                        Registrar otro producto
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
