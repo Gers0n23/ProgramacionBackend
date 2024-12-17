@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ninja',
     'productos',
 ]
 
@@ -129,3 +131,8 @@ LOGOUT_REDIRECT_URL = '/'  # Después de logout
 # Configuración de sesión
 SESSION_COOKIE_AGE = 3600  # Duración de la sesión en segundos (1 hora)
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # La sesión expira al cerrar el navegador
+
+# Configuración JWT
+JWT_SECRET = 'tu_clave_secreta_muy_segura' 
+JWT_ALGORITHM = "HS256"
+JWT_ACCESS_TOKEN_LIFETIME = timedelta(hours=1)

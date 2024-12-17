@@ -1,7 +1,7 @@
 # Gestión de Productos
 
 ## Descripción
-Este proyecto es una aplicación web desarrollada con Django para la gestión de productos. Permite administrar productos, categorías, marcas y características.
+Este proyecto es una aplicación web desarrollada con Django para la gestión de productos. Permite administrar productos, categorías, marcas y características, incluyendo una API RESTful para integración con otros sistemas.
 
 ## Características
 - Gestión completa de productos (CRUD):
@@ -12,21 +12,20 @@ Este proyecto es una aplicación web desarrollada con Django para la gestión de
   - Categoría
   - Características
   - Fecha de vencimiento
-- Administración de catálogos en Django Admin:
-  - Categorías
-  - Marcas
-  - Características
-- Filtrado de productos por categoría, marca y características
+- Administración de catálogos en Django Admin
+- Filtrado de productos
+- API RESTful con autenticación JWT
 - Interfaz de usuario moderna con diseño responsive
 
 ## Requisitos
 - Python 3.8+
 - Django 5.1+
+- django-ninja 1.1.0+
 
 ## Instalación
 1. Clonar el repositorio:
 ```bash
-git clone [URL_DEL_REPOSITORIO]
+git clone [https://github.com/Gers0n23/ti2041-2024/tree/main/evaluaciones/Sumativa4/gestion_productos]
 cd gestion-productos
 ```
 
@@ -54,131 +53,85 @@ python manage.py createsuperuser
 # Contraseña: inacap2024 
 ```
 
+## Uso de la API REST
+
+### Documentación de la API
+La documentación detallada de la API está disponible en:
+```
+http://localhost:8000/api/docs
+```
+
+### Autenticación JWT
+Para obtener el token de acceso:
+```http
+POST /api/auth/token
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "inacap2024"
+}
+```
+
+### Endpoints Disponibles
+
+#### Endpoints Públicos
+- `GET /api/categorias` - Lista todas las categorías
+- `GET /api/marcas` - Lista todas las marcas
+- `GET /api/productos` - Lista todos los productos
+  - Filtros: `?marca_id=1` o `?categoria_id=1`
+- `GET /api/productos/{codigo}` - Detalle de un producto
+
+#### Endpoints Protegidos (requieren JWT)
+- `PATCH /api/productos/{codigo}` - Actualiza un producto
+```json
+{
+    "nombre": "Nuevo nombre",
+    "precio": 1999,
+    "marca_id": 1
+}
+```
+
+Para usar endpoints protegidos, incluir en headers:
+```
+Authorization: Bearer {token}
+```
+
 ## Estructura del Proyecto
 ```
 GESTION_PRODUCTOS
 ├── gestion_productos/
-│   ├── __pycache__/
-│   │   ├── __init__.py
-│   │   ├── asgi.py
-│   │   ├── settings.py
-│   │   ├── urls.py
-│   │   ├── wsgi.py
-│   ├── media/  
 │   ├── __init__.py
 │   ├── asgi.py
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
 ├── productos/
-│   ├── __pycache__/
-│   │   ├── __init__.py
-│   │   ├── admin.py
-│   │   ├── apps.py
-│   │   ├── forms.py
-│   │   ├── models.py
-│   │   ├── tests.py
-│   │   └── views.py
-│   ├── migrations/
-│   │   └── __pycache__/ 
-│   ├── templatetags/
-│   │   ├── __init__.py
-│   │   └── __pycache__/
-│   ├── __init__.py
-│   ├── admin.py
-│   ├── apps.py
-│   ├── forms.py
-│   ├── models.py
-│   ├── tests.py
-│   └── views.py
+│   ├── api.py           # API endpoints
+│   ├── models.py        # Modelos de datos
+│   ├── views.py         # Vistas web
+│   └── admin.py         # Configuración admin
 ├── static/
-│   ├── css/
-│   │   └── styles.css
-│   └── js/
-│       └── carrito.js
+│   └── css/
 ├── templates/
-│   ├── caracteristicas/
-│   │   ├── crear.html
-│   │   ├── editar.html
-│   │   ├── eliminar.html
-│   │   └── lista.html
-│   ├── productos/
-│   │   ├── crear.html
-│   │   ├── editar.html
-│   │   ├── eliminar.html
-│   │   └── lista.html 
-│   ├── base.html
-│   ├── consulta.html
-│   ├── login.html
-│   ├── registro.html
-│   └── resultado.html
-├── .hintrc
-├── db.sqlite3
-├── manage.py
-└── requirements.txt
+│   └── productos/
+└── manage.py
 ```
 
-## Uso
-1. Iniciar el servidor:
-```bash 
-python manage.py runserver
+## Seguridad
+- Protección CSRF en formularios web
+- Autenticación JWT para API
+- Validación de datos en formularios y API
+- Manejo de permisos basado en grupos de usuario
+
+## Desarrollo y Contribución
+1. Crear rama para nuevas características:
+```bash
+git checkout -b feature/nueva-caracteristica
 ```
 
-2. Acceder a la aplicación:
-- Panel de administración: `http://localhost:8000/admin`
-- Gestión de productos: `http://localhost:8000`
-
-3. Credenciales de administrador:
-- Usuario: admin
-- Contraseña: inacap2024
-
-## Funcionalidades Principales
-- Registro y gestión de productos
-- Gestión de características de productos
-- Filtrado avanzado de productos
-- Panel de administración Django
-
-## Aseguramiento de Vistas
-Las vistas que requieren autenticación y permisos de administrador (grupo ADMIN_PRODUCTS) han sido aseguradas utilizando los decoradores `@login_required` y `@user_passes_test`. Por ejemplo:
-
-```python
-@login_required
-def lista_productos(request):
-    # ...
-
-@user_passes_test(lambda u: u.groups.filter(name='ADMIN_PRODUCTS').exists())
-def crear_producto(request):
-    # ...
+2. Enviar cambios:
+```bash
+git commit -am "Descripción del cambio"
+git push origin feature/nueva-caracteristica
 ```
-
-## Uso de Variables de Sesión
-Se utilizan variables de sesión para almacenar información relevante durante la navegación, como el nombre del usuario conectado, la fecha de la conexión y si posee el grupo de accesos ADMIN_PRODUCTS. Por ejemplo:
-
-```python
-def custom_login(request):
-    # ...
-    if user is not None:
-        # ...
-        request.session['user_name'] = user.get_full_name() or user.username
-        request.session['login_time'] = timezone.now().isoformat()
-        request.session['is_admin_products'] = user.groups.filter(name='ADMIN_PRODUCTS').exists()
-        # ...
-```
-
-## Medidas de Seguridad
-1. **Protección CSRF**: Se utiliza el middleware `django.middleware.csrf.CsrfViewMiddleware` y el tag `{% csrf_token %}` en los formularios para proteger contra ataques CSRF (Cross-Site Request Forgery).
-
-2. **Validación de Datos**: Se realizan validaciones en los formularios utilizando las clases `ModelForm` de Django. Esto asegura que los datos ingresados cumplan con los requisitos especificados antes de ser procesados.
-
-   Ejemplo de validación en `CaracteristicaForm`:
-   ```python
-   def clean_nombre(self):
-       nombre = self.cleaned_data.get('nombre')
-       if nombre:
-           nombre = nombre.strip()
-           if len(nombre) < 2:
-               raise forms.ValidationError('El nombre debe tener al menos 2 caracteres.')
-       return nombre
-   ```
-
-3. **Escapado de Caracteres**: Django automáticamente escapa los caracteres especiales en las plantillas para prevenir ataques XSS (Cross-Site Scripting). Esto se logra utilizando el sistema de plantillas de Django y evitando la renderización manual de contenido no confiable.

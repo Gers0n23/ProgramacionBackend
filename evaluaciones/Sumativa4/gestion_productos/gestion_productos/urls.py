@@ -20,10 +20,14 @@ from django.contrib.auth import views as auth_views
 from productos import views
 from django.conf import settings
 from django.conf.urls.static import static
+from productos.api import api
 
 urlpatterns = [
     # URL del administrador
     path('admin/', admin.site.urls),
+    
+    # Nueva URL para la API
+    path("api/", api.urls),
     
     # URLs de autenticación
     path('', views.custom_login, name='login'),
