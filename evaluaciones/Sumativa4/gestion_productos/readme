@@ -77,13 +77,22 @@ Content-Type: application/json
 
 #### Endpoints Públicos
 - `GET /api/categorias` - Lista todas las categorías
+- `POST /api/categorias` - Crea una nueva categoría
+- `PUT /api/categorias/{id}` - Actualiza una categoría existente
+- `DELETE /api/categorias/{id}` - Elimina una categoría existente
 - `GET /api/marcas` - Lista todas las marcas
+- `POST /api/marcas` - Crea una nueva marca
+- `PUT /api/marcas/{id}` - Actualiza una marca existente
+- `DELETE /api/marcas/{id}` - Elimina una marca existente
 - `GET /api/productos` - Lista todos los productos
   - Filtros: `?marca_id=1` o `?categoria_id=1`
-- `GET /api/productos/{codigo}` - Detalle de un producto
+- `POST /api/productos` - Crea un nuevo producto
+- `DELETE /api/productos/{codigo}` - Elimina un producto existente
 
 #### Endpoints Protegidos (requieren JWT)
-- `PATCH /api/productos/{codigo}` - Actualiza un producto
+- `PATCH /api/productos/{codigo}` - Actualiza parcialmente un producto
+- `PUT /api/productos/{codigo}` - Actualiza completamente un producto
+
 ```json
 {
     "nombre": "Nuevo nombre",
