@@ -149,6 +149,45 @@ def listar_categorias(request):
     """
     return Categoria.objects.all()
 
+# Crear categoría
+@api.post("/categorias", response={201: CategoriaOutSchema, 400: dict}, tags=["Categorías"])
+def crear_categoria(request, nombre: str):
+    """
+    Crea una nueva categoría.
+    """
+    try:
+        categoria = Categoria.objects.create(nombre=nombre)
+        return 201, {"id": categoria.id, "nombre": categoria.nombre}
+    except Exception as e:
+        return 400, {"detail": str(e)}
+
+
+# Actualizar categoría
+@api.put("/categorias/{id}", response={200: CategoriaOutSchema, 404: dict, 400: dict}, tags=["Categorías"])
+def actualizar_categoria(request, id: int, nombre: str):
+    """
+    Actualiza una categoría existente.
+    """
+    categoria = get_object_or_404(Categoria, id=id)
+    try:
+        categoria.nombre = nombre
+        categoria.save()
+        return {"id": categoria.id, "nombre": categoria.nombre}
+    except Exception as e:
+        return 400, {"detail": str(e)}
+
+
+# Eliminar categoría
+@api.delete("/categorias/{id}", response={204: None, 404: dict}, tags=["Categorías"])
+def eliminar_categoria(request, id: int):
+    """
+    Elimina una categoría existente.
+    """
+    categoria = get_object_or_404(Categoria, id=id)
+    categoria.delete()
+    return 204, None
+
+
 # Endpoints Marcas
 @api.get("/marcas", response=List[MarcaOutSchema], tags=["Marcas"])
 def listar_marcas(request):
@@ -173,6 +212,45 @@ def listar_marcas(request):
         ```
     """
     return Marca.objects.all()
+
+# Crear marca
+@api.post("/marcas", response={201: MarcaOutSchema, 400: dict}, tags=["Marcas"])
+def crear_marca(request, nombre: str):
+    """
+    Crea una nueva marca.
+    """
+    try:
+        marca = Marca.objects.create(nombre=nombre)
+        return 201, {"id": marca.id, "nombre": marca.nombre}
+    except Exception as e:
+        return 400, {"detail": str(e)}
+
+
+# Actualizar marca
+@api.put("/marcas/{id}", response={200: MarcaOutSchema, 404: dict, 400: dict}, tags=["Marcas"])
+def actualizar_marca(request, id: int, nombre: str):
+    """
+    Actualiza una marca existente.
+    """
+    marca = get_object_or_404(Marca, id=id)
+    try:
+        marca.nombre = nombre
+        marca.save()
+        return {"id": marca.id, "nombre": marca.nombre}
+    except Exception as e:
+        return 400, {"detail": str(e)}
+
+
+# Eliminar marca
+@api.delete("/marcas/{id}", response={204: None, 404: dict}, tags=["Marcas"])
+def eliminar_marca(request, id: int):
+    """
+    Elimina una marca existente.
+    """
+    marca = get_object_or_404(Marca, id=id)
+    marca.delete()
+    return 204, None
+
 
 
 class ProductoBasicoSchema(Schema):
@@ -251,6 +329,65 @@ def listar_productos(request, marca_id: Optional[int] = None, categoria_id: Opti
         for producto in productos
     ]
 
+# Endpoint para crear producto
+@api.post("/productos", response={201: ProductoDetalleSchema, 400: dict}, tags=["Productos"])
+def crear_producto(request, datos: ProductoUpdateCompletoSchema):
+    
+    """
+    Crea un nuevo producto en la base de datos.
+    Args:
+        request: La solicitud HTTP que desencadena la creación del producto.
+        datos (ProductoUpdateCompletoSchema): Un esquema que contiene los datos necesarios para crear el producto, 
+                                              incluyendo nombre, precio, marca_id, categoria_id, fecha_vencimiento y caracteristicas.
+    Returns:
+        tuple: Una tupla que contiene el código de estado HTTP y el objeto producto creado o un mensaje de error.
+               - (201, producto): Si el producto se crea exitosamente.
+               - (400, {"detail": str(e)}): Si ocurre un error durante la creación del producto.
+    Raises:
+        Exception: Cualquier excepción que ocurra durante la creación del producto será capturada y retornada en el mensaje de error.
+    
+    """
+    try:
+        marca = get_object_or_404(Marca, id=datos.marca_id)
+        categoria = get_object_or_404(Categoria, id=datos.categoria_id)
+        
+        producto = Producto.objects.create(
+            nombre=datos.nombre,
+            precio=datos.precio,
+            marca=marca,
+            categoria=categoria,
+            fecha_vencimiento=datetime.strptime(datos.fecha_vencimiento, '%Y-%m-%d').date()
+        )
+        producto.caracteristicas.set(datos.caracteristicas)
+        
+        return 201, producto
+
+    except Exception as e:
+        return 400, {"detail": str(e)}
+
+# Endpoint para eliminar producto
+@api.delete("/productos/{codigo}", response={204: None, 404: dict}, auth=AuthBearer(), tags=["Productos"])
+def eliminar_producto(request, codigo: str):
+    
+    """
+    Elimina un producto existente.
+
+    Este endpoint permite eliminar un producto de la base de datos utilizando su código único.
+
+    Args:
+        request: La solicitud HTTP que contiene los datos necesarios para procesar la eliminación.
+        codigo (str): El código único del producto que se desea eliminar.
+
+    Returns:
+        tuple: Una tupla que contiene el código de estado HTTP 204 (No Content) y None, indicando que la eliminación fue exitosa y no hay contenido adicional que devolver.
+
+    Raises:
+        Http404: Si no se encuentra un producto con el código proporcionado.
+    """
+
+    producto = get_object_or_404(Producto, codigo=codigo)
+    producto.delete()
+    return 204, None
 
 @api.patch("/productos/{codigo}", 
           auth=AuthBearer(),
@@ -380,3 +517,4 @@ def actualizar_producto_completo(request, codigo: str, datos: ProductoUpdateComp
             {"detail": str(e)},
             status=400
         )
+        
